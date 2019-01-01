@@ -1,4 +1,4 @@
-from CNNGRU_cell import *
+from convGRU_cell import *
 
 class ConvGRU(nn.Module):
     def __init__(self, channel_input, channel_downsample, channel_crnn,
