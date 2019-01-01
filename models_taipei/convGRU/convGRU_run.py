@@ -145,10 +145,10 @@ def run(result_name, channel_factor, input_frames, output_frames, input_size, ou
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
-    if int(args.input_shape[0]/3) == args.forecast_shape:
+    if int(args.input_shape[0]/3) == args.forecast_shape[0]:
         encoder_kernel_downsample = [5,4,4]
         encoder_stride_downsample = [3,2,2]
-    elif args.input_shape[0] == args.forecast_shape:
+    elif args.input_shape[0] == args.forecast_shape[0]:
         encoder_kernel_downsample = [4,4,4]
         encoder_stride_downsample = [4,2,2]
 
@@ -219,6 +219,7 @@ def main():
         createfolder(result_dir)
         result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
         print(os.path.abspath(result_name))
+        print()
 
         run(result_name=result_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
             output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
