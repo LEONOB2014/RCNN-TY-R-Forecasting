@@ -1,0 +1,50 @@
+Epoch [1/50], Test Loss:   5.358
+Epoch [2/50], Test Loss:   5.337
+Epoch [3/50], Test Loss:   4.373
+Epoch [4/50], Test Loss:   6.170
+Epoch [5/50], Test Loss:   4.060
+Epoch [6/50], Test Loss:   4.459
+Epoch [7/50], Test Loss:   4.024
+Epoch [8/50], Test Loss:   3.721
+Epoch [9/50], Test Loss:   3.771
+Epoch [10/50], Test Loss:   3.417
+Epoch [11/50], Test Loss:   3.206
+Epoch [12/50], Test Loss:   3.176
+Epoch [13/50], Test Loss:   2.800
+Epoch [14/50], Test Loss:   2.447
+Epoch [15/50], Test Loss:   2.342
+Epoch [16/50], Test Loss:   7.757
+Epoch [17/50], Test Loss:84051.938
+Epoch [18/50], Test Loss:29461.494
+Epoch [19/50], Test Loss:11350.694
+Epoch [20/50], Test Loss:93021.742
+Epoch [21/50], Test Loss:2747.089
+Epoch [22/50], Test Loss:1827.776
+Epoch [23/50], Test Loss:2302.539
+Epoch [24/50], Test Loss:119494.195
+Epoch [25/50], Test Loss:4892.630
+Epoch [26/50], Test Loss:12266.387
+Epoch [27/50], Test Loss: 708.135
+Epoch [28/50], Test Loss:18667.652
+Epoch [29/50], Test Loss:85453.664
+Epoch [30/50], Test Loss: 623.954
+Epoch [31/50], Test Loss:535955.125
+Epoch [32/50], Test Loss:21300.941
+Epoch [33/50], Test Loss:1745.779
+Epoch [34/50], Test Loss: 648.181
+Epoch [35/50], Test Loss:5648.938
+Epoch [36/50], Test Loss:13013.038
+Epoch [37/50], Test Loss:160989.844
+Epoch [38/50], Test Loss:26840.689
+Epoch [39/50], Test Loss:14580.016
+Epoch [40/50], Test Loss:8942.040
+Epoch [41/50], Test Loss:289862.125
+Epoch [42/50], Test Loss:470021.688
+Epoch [43/50], Test Loss:264095.125
+Epoch [44/50], Test Loss:11396854.000
+Epoch [45/50], Test Loss:7156.165
+Epoch [46/50], Test Loss:1046969.812
+Epoch [47/50], Test Loss:16368.384
+Epoch [48/50], Test Loss:2401296.750
+Epoch [49/50], Test Loss:1176603.125
+Epoch [50/50], Test Loss:1170.071
