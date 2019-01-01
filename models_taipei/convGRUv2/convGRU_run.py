@@ -198,16 +198,26 @@ def run(results_file, channel_factor=3, input_frames=5, output_frames=18, input_
     train(net=Net, trainloader=trainloader, testloader=testloader, results_file=results_file,
             max_epochs=max_epochs, loss_function=loss_function, device=device)
 
-# set gpu or cpu
-def main():
+if __name__ == "__main__":
+    if args.root_dir:
+        print("Please set the directory of root data ")
+        break
+    elif args.ty_list_file:
+        print("Please set typhoon list file")
+        break
+    elif args.result_dir:
+        print("Please set the directory of the results")
+        break
+    # set the parameters of the experiment
     output_frames = 18
     channel_factor = 2
     input_frames = 10
-    results_dir = "../01_results/ConvGRUv2_c.{:d}".format(channel_factor)
-    createfolder(results_dir)
-    results_name = os.path.join(results_dir,"BMSE_f.{:02d}_x.{:02d}.txt".format(output_frames,input_frames))
-    print(results_name)
-    run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, loss_function="BMSE", max_epochs=100, device=args.device)
 
-if __name__ == "__main__":
-    main()
+    result_dir = os.path.join(args.result_dir,args.root_dir[-9:])
+    createfolder(result_dir)
+    result_dir = os.path.join(result_dir,"ConvGRUv2_c.{:d}".format(channel_factor))
+    createfolder(result_dir)
+    result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:.1e}.txt".format(output_frames,input_frames,args.weight_decay))
+    print(os.path.abspath(result_name))
+
+    # run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, loss_function="BMSE", max_epochs=100, device=args.device)
