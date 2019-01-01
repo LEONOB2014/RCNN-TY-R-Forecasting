@@ -106,7 +106,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
                         input_size=input_size,
                         output_size=output_size,
                         train=True,
-                        root_dir=args.root_dir),
+                        root_dir=args.root_dir,
                         transform = transfrom)
     testdataset = TyDataset(ty_list_file="../../ty_list.xlsx",
                         input_frames=input_frames,
