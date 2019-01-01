@@ -101,7 +101,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
     transfrom = transforms.Compose([ToTensor(),Normalize(mean=mean, std=std)])
 
     # set train and test dataset
-    traindataset = TyDataset(ty_list_file="../../ty_list.xlsx",
+    traindataset = TyDataset(ty_list_file=args.ty_list_file,
                         input_frames=input_frames,
                         output_frames=output_frames,
                         input_size=input_size,
@@ -109,7 +109,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
                         train=True,
                         root_dir=args.root_dir,
                         transform = transfrom)
-    testdataset = TyDataset(ty_list_file="../../ty_list.xlsx",
+    testdataset = TyDataset(ty_list_file=args.ty_list_file,
                         input_frames=input_frames,
                         output_frames=output_frames,
                         input_size=input_size,
@@ -126,7 +126,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
     return trainloader, testloader
 
 
-def run(results_file, channel_factor=3, input_frames=5, output_frames=18, input_size=180, output_size=60,
+def run(results_file, channel_factor, input_frames, output_frames, input_size, output_size,
         loss_function=BMSE, max_epochs=50, device=args.device):
 
     # if loss_function == "BMSE":
@@ -220,7 +220,8 @@ def main():
         result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
         print(os.path.abspath(result_name))
 
-        # run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, loss_function="BMSE", max_epochs=100, device=args.device)
+        run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
+            output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
 
 
 if __name__ == "__main__":

@@ -66,6 +66,6 @@ else:
     args.device = torch.device('cpu')
 
 args.forecast_shape = (math.ceil((args.forecast_lat_h-args.forecast_lat_l)/args.res_degree),
-                       math.ceil((args.forecast_lon_h-args.forecast_lon_l)))
+                       math.ceil((args.forecast_lon_h-args.forecast_lon_l)/args.res_degree))
 args.input_shape = (math.ceil((args.input_lat_h-args.input_lat_l)/args.res_degree),
-                    math.ceil((args.input_lon_h-args.input_lon_l)))
+                    math.ceil((args.input_lon_h-args.input_lon_l)/args.res_degree))
