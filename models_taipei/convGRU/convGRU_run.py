@@ -145,10 +145,10 @@ def run(result_name, channel_factor, input_frames, output_frames, input_size, ou
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
-    if int(args.input_shape[0]/3) == args.forecast_shape[0]:
+    if int(input_size/3) == output_size:
         encoder_kernel_downsample = [5,4,4]
         encoder_stride_downsample = [3,2,2]
-    elif args.input_shape[0] == args.forecast_shape[0]:
+    elif input_size == output_size:
         encoder_kernel_downsample = [4,4,4]
         encoder_stride_downsample = [4,2,2]
 
