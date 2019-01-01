@@ -126,7 +126,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
     return trainloader, testloader
 
 
-def run(results_file, channel_factor, input_frames, output_frames, input_size, output_size,
+def run(result_name, channel_factor, input_frames, output_frames, input_size, output_size,
         loss_function=BMSE, max_epochs=50, device=args.device):
 
     # if loss_function == "BMSE":
@@ -220,7 +220,7 @@ def main():
         result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
         print(os.path.abspath(result_name))
 
-        run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
+        run(result_name=result_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
             output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
 
 
