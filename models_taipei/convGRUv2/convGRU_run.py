@@ -219,7 +219,7 @@ def main():
         createfolder(result_dir)
         result_dir = os.path.join(result_dir,"ConvGRUv2_c.{:d}".format(channel_factor))
         createfolder(result_dir)
-        result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:.1e}.txt".format(output_frames,input_frames,args.weight_decay))
+        result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
         print(os.path.abspath(result_name))
 
         # run(results_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, loss_function="BMSE", max_epochs=100, device=args.device)
