@@ -15,7 +15,7 @@ from torchvision import transforms, utils
 
 # import our model and dataloader
 import sys
-sys.path.append("..")
+sys.path.append(os.path.abspath('..'))
 from tools.args_tools import args, createfolder
 from tools.dataset_GRU import ToTensor, Normalize, TyDataset
 from tools.loss_function import BMAE, BMSE
@@ -24,10 +24,6 @@ from convGRU import model
 def train(net, trainloader, testloader, results_file, max_epochs=50, loss_function=BMSE,
         optimizer=optim.Adam, device=args.device):
     net.train()
-    # open a new file to save results.
-    f_train = open(results_file,"w")
-    test_file = results_file[:-4]+"_test.txt"
-    f_test = open(test_file,"w")
 
     # Set optimizer
     optimizer = optimizer(net.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -35,6 +31,11 @@ def train(net, trainloader, testloader, results_file, max_epochs=50, loss_functi
 
     for epoch in range(max_epochs):
         # Training
+        # open a new file to save results.
+        f_train = open(results_file,"w")
+        test_file = results_file[:-4]+"_test.txt"
+        f_test = open(test_file,"w")
+
         for i, data in enumerate(trainloader,0):
             inputs = data["RAD"].to(device, dtype=torch.float)
             labels = data["QPE"].to(device, dtype=torch.float)
@@ -66,17 +67,18 @@ def train(net, trainloader, testloader, results_file, max_epochs=50, loss_functi
 
         print("ConvGRUv2|  Epoch [{}/{}], Test Loss: {:8.3f}".format(epoch+1, max_epochs, test_loss))
         f_test.writelines("Epoch [{}/{}], Test Loss: {:8.3f}\n".format(epoch+1, max_epochs, test_loss))
+        if (epoch+1) % 10 == 0:
+            torch.save(net.state_dict(), result_file[:-4]+'_{:d}.ckpt'.format(epoch+1))
+        if (epoch+1) == max_epochs:
+            total_params = sum(p.numel() for p in net.parameters())
+            print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
+            f_train.writelines("\nTotal_params: {:.2e}".format(total_params))
+        f_train.close()
+        f_test.close()
 
-    total_params = sum(p.numel() for p in net.parameters())
-    print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
-    f_train.writelines("\nTotal_params: {:.2e}".format(total_params))
-    f_train.close()
-    f_test.close()
-    torch.save(Net.state_dict(), results_file[:-4]+'.ckpt')
 
 def test(net, testloader, loss_function=nn.MSELoss(), device=args.device):
     net.eval()
-
     loss = 0
     n = 0
     with torch.no_grad():
@@ -91,7 +93,7 @@ def test(net, testloader, loss_function=nn.MSELoss(), device=args.device):
         loss = loss/n
     return loss
 
-def get_dataloader(input_frames, output_frames):
+def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 60):
     # Normalize data
     mean = [12.834] * input_frames
     std = [14.14] * input_frames
@@ -101,18 +103,18 @@ def get_dataloader(input_frames, output_frames):
     traindataset = TyDataset(ty_list_file="../../ty_list.xlsx",
                         input_frames=input_frames,
                         output_frames=output_frames,
-                        input_size = 180,
-                        output_size = 60,
+                        input_size=input_size,
+                        output_size=output_size,
                         train=True,
-                        root_dir=os.path.join("../../01_Radar_data",args.files_folder),
+                        root_dir=args.root_dir),
                         transform = transfrom)
     testdataset = TyDataset(ty_list_file="../../ty_list.xlsx",
                         input_frames=input_frames,
                         output_frames=output_frames,
-                        input_size = 180,
-                        output_size = 60,
+                        input_size=input_size,
+                        output_size=output_size,
                         train=False,
-                        root_dir=os.path.join("../../01_Radar_data",args.files_folder),
+                        root_dir=args.root_dir,
                         transform = transfrom)
 
     # set train and test dataloader
@@ -123,44 +125,56 @@ def get_dataloader(input_frames, output_frames):
     return trainloader, testloader
 
 
-def run(results_file, channel_factor=3, input_frames=5, output_frames=18,
-        loss_function="BMSE", max_epochs=50, device=args.device):
+def run(results_file, channel_factor=3, input_frames=5, output_frames=18, input_size=180, output_size=60,
+        loss_function=BMSE, max_epochs=50, device=args.device):
 
-    if loss_function == "BMSE":
-        loss_function = BMSE
-    elif loss_function == "BMAE":
-        loss_function = BMAE
+    # if loss_function == "BMSE":
+    #     loss_function = BMSE
+    # elif loss_function == "BMAE":
+    #     loss_function = BMAE
 
-    trainloader, testloader = get_dataloader(input_frames=input_frames, output_frames=output_frames)
+    # get dataloader
+    trainloader, testloader = get_dataloader(input_frames=input_frames, output_frames=output_frames,
+                                             input_size=input_size, output_size=output_size)
+
+    # set the factor of cnn channels
     c = channel_factor
 
-    # Make ConvGRU Net
+    # construct convGRU net
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
-    encoder_crnn = [32*c,96*c,96*c]
-    encoder_kernel_downsample = [5,4,4]
-    encoder_kernel_crnn = [3,3,3]
-    encoder_stride_downsample = [3,2,2]
-    encoder_stride_crnn = [1,1,1]
+    if int(args.input_shape[0]/3) == args.forecast_shape:
+        encoder_kernel_downsample = [5,4,4]
+        encoder_stride_downsample = [3,2,2]
+    elif args.input_shape[0] == args.forecast_shape:
+        encoder_kernel_downsample = [4,4,4]
+        encoder_stride_downsample = [4,2,2]
+
     encoder_padding_downsample = [1,1,1]
+
+    encoder_crnn = [32*c,96*c,96*c]
+    encoder_kernel_crnn = [4,4,4]
+    encoder_stride_crnn = [1,1,1]
     encoder_padding_crnn = [1,1,1]
     encoder_n_layers = 6
 
     decoder_input=0
     decoder_upsample = [96*c,96*c,4*c]
-    decoder_crnn = [96*c,96*c,32*c]
-    decoder_kernel_upsample = [4,4,5]
-    decoder_kernel_crnn = [3,3,3]
-    decoder_stride_upsample = [2,2,3]
-    decoder_stride_crnn = [1,1,1]
+    decoder_kernel_upsample = [4,4,4]
+    decoder_stride_upsample = [2,2,1]
     decoder_padding_upsample = [1,1,1]
+
+    decoder_crnn = [96*c,96*c,32*c]
+    decoder_kernel_crnn = [4,4,4]
+    decoder_stride_crnn = [1,1,1]
     decoder_padding_crnn = [1,1,1]
     decoder_n_layers = 6
 
     decoder_output = 1
-    decoder_output_kernel = 5
-    decoder_output_stride = 3
+
+    decoder_output_kernel = 4
+    decoder_output_stride = 1
     decoder_output_padding = 1
     decoder_output_layers = 1
 

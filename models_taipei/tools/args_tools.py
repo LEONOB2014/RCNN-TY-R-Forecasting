@@ -17,7 +17,6 @@ parser.add_argument('--disable-cuda', action='store_true',
 parser.add_argument('--gpu', default=0, type=int, metavar='',
                     help='Set the gpu device(default=0)')
 
-
 parser.add_argument('--max-epochs', default=50, type=int, metavar='',
                     help='Max epochs (default=50)')
 parser.add_argument('--batch-size', default=4, type=int, metavar='',
@@ -66,7 +65,7 @@ if not args.disable_cuda and torch.cuda.is_available():
 else:
     args.device = torch.device('cpu')
 
-args.forecast_shape = (math.ceil((args.forecast_lat_h-args.forecast_lat_l)/args.res_degree), 
+args.forecast_shape = (math.ceil((args.forecast_lat_h-args.forecast_lat_l)/args.res_degree),
                        math.ceil((args.forecast_lon_h-args.forecast_lon_l)))
-args.input_shape = (math.ceil((args.input_lat_h-args.input_lat_l)/args.res_degree), 
+args.input_shape = (math.ceil((args.input_lat_h-args.input_lat_l)/args.res_degree),
                     math.ceil((args.input_lon_h-args.input_lon_l)))

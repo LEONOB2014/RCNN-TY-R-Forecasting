@@ -65,17 +65,16 @@ def train(net, trainloader, testloader, result_file, max_epochs=args.max_epochs,
 
         # Save the test loss per epoch
         test_loss = test(net, testloader=testloader, loss_function=loss_function, device=device)
-
         print("ConvGRUv2|  Epoch [{}/{}], Test Loss: {:8.3f}".format(epoch+1, max_epochs, test_loss))
         f_test.writelines("Epoch [{}/{}], Test Loss:{:8.3f}\n".format(epoch+1, max_epochs, test_loss))
         if (epoch+1) % 10 == 0:
-            torch.save(net.state_dict(), result_file[:-4]+'_{:d}.ckpt'.format(epoch))
-
-    total_params = sum(p.numel() for p in net.parameters())
-    print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
-    f_train.writelines("\nTotal_params: {:.2e}".format(total_params))
-    f_train.close()
-    f_test.close()
+            torch.save(net.state_dict(), result_file[:-4]+'_{:d}.ckpt'.format(epoch+1))
+        if (epoch+1) == max_epochs:
+            total_params = sum(p.numel() for p in net.parameters())
+            print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
+            f_train.writelines("\nTotal_params: {:.2e}".format(total_params))
+        f_train.close()
+        f_test.close()
 
 
 def test(net, testloader, loss_function=nn.MSELoss(), device=args.device):
@@ -118,9 +117,10 @@ def get_dataloader(input_frames, output_frames):
                         transform=transfrom)
 
     # set train and test dataloader
-    params = {"batch_size": args.batch_size, "shuffle":True, "num_workers":1}
+    params = {"batch_size": args.batch_size, "shuffle":True, "num_workers":4}
     trainloader = DataLoader(traindataset, **params)
-    testloader = DataLoader(testdataset, batch_size= args.batch_size, shuffle=False)
+    params = {"batch_size": args.batch_size, "shuffle":False, "num_workers":4}
+    testloader = DataLoader(testdataset, **params)
 
     return trainloader, testloader
 
@@ -139,7 +139,7 @@ def run(result_file, channel_factor=3, input_frames=5, output_frames=18,
     # set the factor of cnn channels
     c = channel_factor
 
-    # make convGRU net
+    # construct convGRU net
     # initialize the parameters of the encoders and forecasters
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
