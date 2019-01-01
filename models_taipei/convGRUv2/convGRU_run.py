@@ -18,7 +18,7 @@ import sys
 sys.path.append(os.path.abspath('..'))
 
 from tools.args_tools import args, createfolder
-from tools.dataset_GRU import ToTensor, Normalize, TyDataset
+from tools.datasetGRU import ToTensor, Normalize, TyDataset
 from tools.loss_function import BMAE, BMSE
 from convGRU import model
 
