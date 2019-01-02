@@ -94,6 +94,7 @@ def uncompress_and_output_numpy_files():
             os.remove(tmp_uncompressed_file)
             os.remove(tmp_file_out)
 
+
 def check_data():
     # Set path
     numpy_files_folder = args.numpy_files_folder
