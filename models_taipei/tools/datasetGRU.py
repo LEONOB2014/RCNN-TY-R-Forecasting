@@ -13,8 +13,8 @@ from .args_tools import args
 class TyDataset(Dataset):
     """Typhoon dataset"""
 
-    def __init__(self, ty_list_file, root_dir, train=True, train_num=11,
-                input_frames=5, output_frames=18, input_size=180, output_size=60, transform=None):
+    def __init__(self, ty_list_file, root_dir, train=True, train_num=11, input_frames=5,
+                 output_frames=18, input_size=180, output_size=60, transform=None):
         """
         Args:
             ty_list_file (string): Path of the typhoon list file.
