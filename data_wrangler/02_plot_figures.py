@@ -15,13 +15,13 @@ def output_figure(fig_type, part):
     lon_h = args.I_lon_h
     # Set path
     numpy_files_folder = args.numpy_files_folder
-    figures_folder = args.figures_folder+"."+study_area
+    figures_folder = os.path.join(args.figures_folder,study_area)
 
     TW_map_file = args.TW_map_file
-    # dropbox_fig_folder = args.dropbox_folder+"/01_TY_database/03_wrangled_fig_"+study_area
 
     ty_list = pd.read_excel(args.ty_list)
     sta_list = pd.read_excel(args.sta_list, index_col="NO")
+
     man_num = 0
     for i in range(len(sta_list)):
         if type(sta_list.index[i]) == int:
@@ -30,9 +30,9 @@ def output_figure(fig_type, part):
             break
 
     # set specific color for radar, qpe, and qpf data
-    levels_qp = [-5,0,10,20,35,50,80,120,160,200]
+    levels_qp = [-1,0,10,20,35,50,80,120,160,200]
     c_qp = ('#FFFFFF','#D2D2FF','#AAAAFF','#8282FF','#6A6AFF','#4242FF','#1A1AFF','#000090','#000040','#000030')
-    levels_rad = [-5,0,10,20,30,40,50,60,70]
+    levels_rad = [-1,0,10,20,30,40,50,60,70]
     c_rad = ('#FFFFFF','#FFD8D8','#FFB8B8','#FF9090','#FF6060','#FF2020','#CC0000','#A00000')
 
     data_path = wrangled_files_folder+'/'+fig_type

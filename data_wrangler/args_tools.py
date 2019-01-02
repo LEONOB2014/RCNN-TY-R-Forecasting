@@ -70,6 +70,13 @@ args.forecast_size=(math.ceil((args.F_lon_h-args.F_lon_l)/args.resolution)+1,mat
 args.origin_lat_size=math.ceil((args.origin_lat_h-args.origin_lat_l)/args.resolution)+1
 args.origin_lon_size=math.ceil((args.origin_lon_h-args.origin_lon_l)/args.resolution)+1
 
+args.I_x_left = int((args.I_lon_l-args.origin_lon_l)/args.resolution + 1)
+args.I_x_right = int(args.I_x_left + (args.I_lon_h-args.I_lon_l)/args.resolution + 1)
+args.I_y_low = int((args.I_lat_l-args.origin_lat_l)/args.resolution + 1)
+args.I_y_high = int(args.I_y_low + int(args.I_lon_h-args.I_lon_l)/args.resolution + 1)
 
 if __name__ == "__main__":
-    print(args.origin_lat_size)
+    print(args.I_x_left)
+    print(args.I_x_right)
+    print(args.I_y_low)
+    print(args.I_y_high)

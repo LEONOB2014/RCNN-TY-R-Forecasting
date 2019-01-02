@@ -1,7 +1,7 @@
 import sys
 import gzip
 import datetime as dt
-from args_tools import *
+from args_tools import args, createfolder
 
 def extract_original_data():
     #load typhoon list file
