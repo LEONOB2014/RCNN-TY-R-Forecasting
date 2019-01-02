@@ -33,22 +33,22 @@ parser.add_argument("--ty-list-file", metavar='', help='The path of ty_list exce
 parser.add_argument("--result-dir", metavar='', help='The path of result folder')
 
 
-parser.add_argument("--input-lat-l", default=23.925, type=float, metavar='',
+parser.add_argument("--I-lat-l", default=23.9125, type=float, metavar='',
                     help='The lowest latitude of the input frames')
-parser.add_argument("--input-lat-h", default=26.1625, type=float, metavar='',
+parser.add_argument("--I-lat-h", default=26.15, type=float, metavar='',
                     help='The highest latitude of the input frames')
-parser.add_argument("--input-lon-l", default=120.4, type=float, metavar='',
+parser.add_argument("--I-lon-l", default=120.4, type=float, metavar='',
                     help='The lowest longitude of the input frames')
-parser.add_argument("--input-lon-h", default=122.6375, type=float, metavar='',
+parser.add_argument("--I-lon-h", default=122.6375, type=float, metavar='',
                     help='The highest longitude of the input frames')
 
-parser.add_argument("--forecast-lat-l", default=24.675, type=float, metavar='',
+parser.add_argument("--F-lat-l", default=24.6625, type=float, metavar='',
                     help='The lowest latitude of the forecast frames')
-parser.add_argument("--forecast-lat-h", default=25.4125, type=float, metavar='',
+parser.add_argument("--F-lat-h", default=25.4, type=float, metavar='',
                     help='The highest latitude of the forecast frames')
-parser.add_argument("--forecast-lon-l", default=121.15, type=float, metavar='',
+parser.add_argument("--F-lon-l", default=121.15, type=float, metavar='',
                     help='The lowest longitude of the forecast frames')
-parser.add_argument("--forecast-lon-h", default=121.8875, type=float, metavar='',
+parser.add_argument("--F-lon-h", default=121.8875, type=float, metavar='',
                     help='The highest longitude of the forecast frames')
 
 parser.add_argument("--res-degree", default=0.0125, metavar='', type=float,
@@ -56,6 +56,11 @@ parser.add_argument("--res-degree", default=0.0125, metavar='', type=float,
 
 
 args = parser.parse_args()
+
+args.origin_lat_l = 20
+args.origin_lat_h = 27
+args.origin_lon_l = 118
+args.origin_lon_h = 123.5
 
 args.device = None
 args.file_shape = None

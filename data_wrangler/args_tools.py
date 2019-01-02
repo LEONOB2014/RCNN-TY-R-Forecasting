@@ -15,26 +15,42 @@ def createfolder(directory):
         print ('Error: Creating directory. ' +  directory)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--study-area", default="Taipei", type=str)
-parser.add_argument("--ty-list", default='../ty_list.xlsx', type=str)
-parser.add_argument("--sta-list", default='../sta_list_all.xlsx', type=str)
-parser.add_argument("--TW-map-file", default="../TW_shapefile/gadm36_TWN_2", type=str)
 
-parser.add_argument("--original-files-folder", default="/ubuntu_hdd/01_research/origianal_radar_data_2012-2018", type=str)
-parser.add_argument("--compressed-files-folder", default=home+"/Desktop/01_compressed_files", type=str)
-parser.add_argument("--readable-files-folder", default="../01_readable_files", type=str)
-parser.add_argument("--wrangled-files-folder", default="../02_wrangled_files", type=str)
-parser.add_argument("--wrangled-figs-folder", default="../02_wrangled_fig", type=str)
+# parser.add_argument("--study-area", default="Taipei", metavar='', type=str)
+parser.add_argument("--ty-list", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/ty_list.xlsx', metavar='', type=str,
+                    help="The path of the typhoon list file.")
+parser.add_argument("--sta-list", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/sta_list_all.xlsx', metavar='', type=str,
+                    help="The path of the station list file.")
+parser.add_argument("--TW-map-file", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/07_TW_shapefile/gadm36_TWN_2', metavar='',
+                    type=str, help="The path of the TW-map file.")
 
-parser.add_argument("--I-lat-l", default=23.9125, type=float)
-parser.add_argument("--I-lat-h", default=26.15, type=float)
-parser.add_argument("--I-lon-l", default=120.4, type=float)
-parser.add_argument("--I-lon-h", default=122.6375, type=float)
+parser.add_argument("--fortran-code-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/06_fortran_source_code", metavar='', type=str, help="The path of the fortran-code folder")
 
-parser.add_argument("--F-lat-l", default=24.6625, type=float)
-parser.add_argument("--F-lat-h", default=25.4, type=float)
-parser.add_argument("--F-lon-l", default=121.15, type=float)
-parser.add_argument("--F-lon-h", default=121.8875, type=float)
+parser.add_argument("--origin-files-folder", default="/ubuntu_hdd/research/origianal_radar_data_2012-2018", metavar='', type=str,
+                    help="The path of the original files folder")
+parser.add_argument("--compressed-files-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/01_compressed_files",
+                    metavar='', type=str, help="The path of the compressed files folder")
+
+parser.add_argument("--numpy-files-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/02_numpy_files", metavar='', type=str,
+                    help="The path of the numpy files folder")
+
+parser.add_argument("--I-lat-l", default=23.9125, type=float, metavar='',
+                    help='The lowest latitude of the input frames')
+parser.add_argument("--I-lat-h", default=26.15, type=float, metavar='',
+                    help='The highest latitude of the input frames')
+parser.add_argument("--I-lon-l", default=120.4, type=float, metavar='',
+                    help='The lowest longitude of the input frames')
+parser.add_argument("--I-lon-h", default=122.6375, type=float, metavar='',
+                    help='The highest longitude of the input frames')
+
+parser.add_argument("--F-lat-l", default=24.6625, type=float, metavar='',
+                    help='The lowest latitude of the forecast frames')
+parser.add_argument("--F-lat-h", default=25.4, type=float, metavar='',
+                    help='The highest latitude of the forecast frames')
+parser.add_argument("--F-lon-l", default=121.15, type=float, metavar='',
+                    help='The lowest longitude of the forecast frames')
+parser.add_argument("--F-lon-h", default=121.8875, type=float, metavar='',
+                    help='The highest longitude of the forecast frames')
 
 parser.add_argument("--origin-lat-l", default=20, type=float)
 parser.add_argument("--origin-lat-h", default=27, type=float)
