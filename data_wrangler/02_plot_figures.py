@@ -95,7 +95,7 @@ def output_figure(fig_type, part):
         figname = fig_path+'/'+j[:-4]+'.png'
         plt.savefig(figname,dpi=300,bbox_inches='tight')
         plt.close()
-        
+
 def multiprocess():
     tt = "*{:^18s}*".format(' Figure makers (multiprocessing) ')
     print("*" * len(tt))
