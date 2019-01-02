@@ -56,24 +56,26 @@ parser.add_argument("--F-lon-l", default=121.15, type=float, metavar='',
 parser.add_argument("--F-lon-h", default=121.8875, type=float, metavar='',
                     help='The highest longitude of the forecast frames')
 
-parser.add_argument("--origin-lat-l", default=20, type=float)
-parser.add_argument("--origin-lat-h", default=27, type=float)
-parser.add_argument("--origin-lon-l", default=118, type=float)
-parser.add_argument("--origin-lon-h", default=123.5, type=float)
 
-parser.add_argument("--resolution", default=0.0125, type=float)
+parser.add_argument("--res-degree", default=0.0125, type=float, metavar='',
+                    help='The res_degree degree of the data')
 
 args = parser.parse_args()
 
-args.input_size=(math.ceil((args.I_lon_h-args.I_lon_l)/args.resolution)+1,math.ceil((args.I_lat_h-args.I_lat_l)/args.resolution)+1)
-args.forecast_size=(math.ceil((args.F_lon_h-args.F_lon_l)/args.resolution)+1,math.ceil((args.F_lat_h-args.F_lat_l)/args.resolution)+1)
-args.origin_lat_size=math.ceil((args.origin_lat_h-args.origin_lat_l)/args.resolution)+1
-args.origin_lon_size=math.ceil((args.origin_lon_h-args.origin_lon_l)/args.resolution)+1
+args.origin_lat_l = 20
+args.origin_lat_h = 27
+args.origin_lon_l = 118
+args.origin_lon_h = 123.5
 
-args.I_x_left = int((args.I_lon_l-args.origin_lon_l)/args.resolution + 1)
-args.I_x_right = int(args.I_x_left + (args.I_lon_h-args.I_lon_l)/args.resolution + 1)
-args.I_y_low = int((args.I_lat_l-args.origin_lat_l)/args.resolution + 1)
-args.I_y_high = int(args.I_y_low + int(args.I_lon_h-args.I_lon_l)/args.resolution + 1)
+args.input_size=(math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree)+1,math.ceil((args.I_lat_h-args.I_lat_l)/args.res_degree)+1)
+args.forecast_size=(math.ceil((args.F_lon_h-args.F_lon_l)/args.res_degree)+1,math.ceil((args.F_lat_h-args.F_lat_l)/args.res_degree)+1)
+args.origin_lat_size=math.ceil((args.origin_lat_h-args.origin_lat_l)/args.res_degree)+1
+args.origin_lon_size=math.ceil((args.origin_lon_h-args.origin_lon_l)/args.res_degree)+1
+
+args.I_x_left = int((args.I_lon_l-args.origin_lon_l)/args.res_degree + 1)
+args.I_x_right = int(args.I_x_left + (args.I_lon_h-args.I_lon_l)/args.res_degree + 1)
+args.I_y_low = int((args.I_lat_l-args.origin_lat_l)/args.res_degree + 1)
+args.I_y_high = int(args.I_y_low + (args.I_lat_h-args.I_lat_l)/args.res_degree + 1)
 
 if __name__ == "__main__":
     print(args.I_x_left)

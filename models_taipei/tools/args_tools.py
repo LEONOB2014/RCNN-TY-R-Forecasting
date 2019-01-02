@@ -48,11 +48,11 @@ parser.add_argument("--F-lat-h", default=25.4, type=float, metavar='',
                     help='The highest latitude of the forecast frames')
 parser.add_argument("--F-lon-l", default=121.15, type=float, metavar='',
                     help='The lowest longitude of the forecast frames')
-parser.add_argument("--F-lon-h", default=121.8875, type=float, metavar='',
+parser.add_argument("--F-lon-h", default=121.8875, type=float,
                     help='The highest longitude of the forecast frames')
 
-parser.add_argument("--res-degree", default=0.0125, metavar='', type=float,
-                    help='The resolution degree of the data')
+parser.add_argument("--res-degree", default=0.0125, type=float, metavar='',
+                    help='The res_degree degree of the data')
 
 
 args = parser.parse_args()
@@ -62,6 +62,16 @@ args.origin_lat_h = 27
 args.origin_lon_l = 118
 args.origin_lon_h = 123.5
 
+args.I_x_left = int((args.I_lon_l-args.origin_lon_l)/args.res_degree + 1)
+args.I_x_right = int(args.I_x_left + (args.I_lon_h-args.I_lon_l)/args.res_degree + 1)
+args.I_y_low = int((args.I_lat_l-args.origin_lat_l)/args.res_degree + 1)
+args.I_y_high = int(args.I_y_low + (args.I_lat_h-args.I_lat_l)/args.res_degree + 1)
+
+args.F_x_left = int((args.F_lon_l-args.origin_lon_l)/args.res_degree + 1)
+args.F_x_right = int(args.F_x_left + (args.F_lon_h-args.F_lon_l)/args.res_degree + 1)
+args.F_y_low = int((args.F_lat_l-args.origin_lat_l)/args.res_degree + 1)
+args.F_y_high = int(args.F_y_low + (args.F_lat_h-args.F_lat_l)/args.res_degree + 1)
+
 args.device = None
 args.file_shape = None
 
@@ -70,7 +80,13 @@ if not args.disable_cuda and torch.cuda.is_available():
 else:
     args.device = torch.device('cpu')
 
-args.forecast_shape = (math.ceil((args.forecast_lat_h-args.forecast_lat_l)/args.res_degree),
-                       math.ceil((args.forecast_lon_h-args.forecast_lon_l)/args.res_degree))
-args.input_shape = (math.ceil((args.input_lat_h-args.input_lat_l)/args.res_degree),
-                    math.ceil((args.input_lon_h-args.input_lon_l)/args.res_degree))
+args.forecast_shape = (math.ceil((args.F_lat_h-args.F_lat_l)/args.res_degree),
+                       math.ceil((args.F_lon_h-args.F_lon_l)/args.res_degree))
+args.input_shape = (math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree),
+                    math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree))
+
+if __name__ == "__main__":
+    print(args.I_x_left)
+    print(args.I_x_right)
+    print(args.I_y_low)
+    print(args.I_y_high)
