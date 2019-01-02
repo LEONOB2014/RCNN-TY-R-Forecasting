@@ -16,7 +16,9 @@ def createfolder(directory):
 
 parser = argparse.ArgumentParser()
 
-# parser.add_argument("--study-area", default="Taipei", metavar='', type=str)
+parser.add_argument("--study-area", default="Taipei", metavar='', type=str)
+parser.add_argument("--radar-folder", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data', metavar='', type=str,
+                    help="The folder path of the radar data.")
 parser.add_argument("--ty-list", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/ty_list.xlsx', metavar='', type=str,
                     help="The path of the typhoon list file.")
 parser.add_argument("--sta-list", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/sta_list_all.xlsx', metavar='', type=str,
@@ -24,15 +26,17 @@ parser.add_argument("--sta-list", default=home+'/OneDrive/01_IIS/04_TY_research/
 parser.add_argument("--TW-map-file", default=home+'/OneDrive/01_IIS/04_TY_research/01_Radar_data/07_TW_shapefile/gadm36_TWN_2', metavar='',
                     type=str, help="The path of the TW-map file.")
 
-parser.add_argument("--fortran-code-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/06_fortran_source_code", metavar='', type=str, help="The path of the fortran-code folder")
+parser.add_argument("--fortran-code-folder", default="fortran_codes/", metavar='', type=str, help="The path of the fortran-code folder")
 
 parser.add_argument("--origin-files-folder", default="/ubuntu_hdd/research/origianal_radar_data_2012-2018", metavar='', type=str,
                     help="The path of the original files folder")
 parser.add_argument("--compressed-files-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/01_compressed_files",
                     metavar='', type=str, help="The path of the compressed files folder")
-
 parser.add_argument("--numpy-files-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/02_numpy_files", metavar='', type=str,
                     help="The path of the numpy files folder")
+parser.add_argument("--figures-folder", default=home+"/OneDrive/01_IIS/04_TY_research/01_Radar_data/03_figures", metavar='', type=str,
+                    help="The path of the numpy files folder")
+
 
 parser.add_argument("--I-lat-l", default=23.9125, type=float, metavar='',
                     help='The lowest latitude of the input frames')

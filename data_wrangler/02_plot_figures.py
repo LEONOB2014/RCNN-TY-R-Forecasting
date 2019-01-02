@@ -7,16 +7,15 @@ from matplotlib.ticker import FormatStrFormatter
 from args_tools import *
 
 def output_figure(fig_type, part):
-    # Taiwan
     study_area = args.study_area
-    # set lat and lon Taiwan
-    lat_l = args.lat_l
-    lat_h = args.lat_h
-    lon_l = args.lon_l
-    lon_h = args.lon_h
+    # set lat and lon of inputs
+    lat_l = args.I_lat_l
+    lat_h = args.I_lat_h
+    lon_l = args.I_lon_l
+    lon_h = args.I_lon_h
     # Set path
-    wrangled_files_folder = args.wrangled_files_folder+"_"+study_area
-    wrangled_figs_folder = args.wrangled_figs_folder+"_"+study_area
+    numpy_files_folder = args.numpy_files_folder
+    figures_folder = args.figures_folder+"."+study_area
 
     TW_map_file = args.TW_map_file
     # dropbox_fig_folder = args.dropbox_folder+"/01_TY_database/03_wrangled_fig_"+study_area
@@ -96,9 +95,8 @@ def output_figure(fig_type, part):
         figname = fig_path+'/'+j[:-4]+'.png'
         plt.savefig(figname,dpi=300,bbox_inches='tight')
         plt.close()
-
-
-if __name__ == "__main__":
+        
+def multiprocess():
     tt = "*{:^18s}*".format(' Figure makers (multiprocessing) ')
     print("*" * len(tt))
     print(tt)
@@ -132,3 +130,6 @@ if __name__ == "__main__":
     p7.join()
     p8.join()
     p9.join()
+
+if __name__ == "__main__":
+    multiprocess()

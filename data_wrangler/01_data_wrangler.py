@@ -1,5 +1,6 @@
 import sys
 import gzip
+import datetime as dt
 from args_tools import *
 
 def extract_original_data():
@@ -8,8 +9,6 @@ def extract_original_data():
 
     origin_files_folder = args.origin_files_folder
     compressed_files_folder = args.compressed_files_folder
-    if os.path.exists(compressed_files_folder):
-        return 'Already extract oringinal data'
     for i in range(len(ty_list)):
         # get the start and end time of the typhoon
         year = ty_list.loc[i,"Time of issuing"].year
@@ -50,14 +49,17 @@ def uncompress_and_output_numpy_files():
     compressed_files_folder = args.compressed_files_folder
     tmp_uncompressed_folder = 'tmp'
     createfolder(tmp_uncompressed_folder)
-
+    count_qpe = {}
+    count_qpf = {}
+    count_rad = {}
     # uncompress the file and output the readable file
     for i in sorted(os.listdir(compressed_files_folder)):
-        print("-------------")
-        compressed_files_folder = os.path.join(args.compressed_files_folder,i)
-        numpy_files_folder = os.path.join(args.numpy_files_folder,i)
-        createfolder(numpy_files_folder)
+        print("-" * 40)
         print(i)
+        compressed_files_folder = os.path.join(args.compressed_files_folder,i)
+        count_qpe[i] = len([x for x in os.listdir(compressed_files_folder) if 'C' == x[0]])
+        count_qpf[i] = len([x for x in os.listdir(compressed_files_folder) if 'M' == x[0]])
+        count_rad[i] = len([x for x in os.listdir(compressed_files_folder) if 'q' == x[0]])
         for j in sorted(os.listdir(compressed_files_folder)):
             compressed_file = os.path.join(compressed_files_folder,j)
             outputtime = j[-16:-8]+j[-7:-3]
@@ -65,15 +67,15 @@ def uncompress_and_output_numpy_files():
 
             if j[0] == "C":
                 name = 'QPE'
-                output_folder = os.path.join(numpy_files_folder,name)
+                output_folder = os.path.join(args.numpy_files_folder,name)
                 createfolder(output_folder)
             elif j[0] == "M":
                 name = 'RAD'
-                output_folder = os.path.join(numpy_files_folder,name)
+                output_folder = os.path.join(args.numpy_files_folder,name)
                 createfolder(output_folder)
             elif j[0] == "q":
                 name = 'QPF'
-                output_folder = os.path.join(numpy_files_folder,name)
+                output_folder = os.path.join(args.numpy_files_folder,name)
                 createfolder(output_folder)
             tmp_uncompressed_file = os.path.join(tmp_uncompressed_folder,name+'_'+outputtime)
 
@@ -84,29 +86,47 @@ def uncompress_and_output_numpy_files():
             g_file.close()
 
             tmp_file_out = os.path.join(tmp_uncompressed_folder, name+"_"+outputtime+".txt")
-            bashcommand = "./fortran_codes/{:s}.out {:s} {:s}".format(name, tmp_uncompressed_file, tmp_file_out)
+            bashcommand = os.path.join('.',args.fortran_code_folder,'{:s}.out {:s} {:s}'.format(name, tmp_uncompressed_file, tmp_file_out))
+
             os.system(bashcommand)
+
             data = pd.read_table(tmp_file_out,delim_whitespace=True,header=None)
             output_path = os.path.join(output_folder,i+"."+outputtime)
-            print(output_path)
-            np.save(output_path,data)
+
+            np.savez_compressed(output_path, data=data)
 
             os.remove(tmp_uncompressed_file)
             os.remove(tmp_file_out)
 
+    return count_qpe, count_qpf, count_rad
 
-def check_data():
+def check_data_and_create_miss_data():
     # Set path
     numpy_files_folder = args.numpy_files_folder
 
     ty_list = pd.read_excel(args.ty_list)
 
-    qpe_list = [x[-16:-4] for x in os.listdir(numpy_files_folder+"/"+"QPE")]
-    qpf_list = [x[-16:-4] for x in os.listdir(numpy_files_folder+"/"+"QPF")]
-    rad_list = [x[-16:-4] for x in os.listdir(numpy_files_folder+"/"+"RAD")]
+    count_qpe = {}
+    count_qpf = {}
+    count_rad = {}
+    for i in sorted(os.listdir(numpy_files_folder)):
+        for j in ty_list.loc[:,"En name"]:
+            if i == "QPE":
+                count_qpe[j] = len([x for x in os.listdir(os.path.join(numpy_files_folder,"QPE")) if j in x])
+            elif i == "QPF":
+                pass
+                # count_qpf[j] = len([x for x in os.listdir(os.path.join(numpy_files_folder,"QPF")) if j in x])
+            else:
+                count_rad[j] = len([x for x in os.listdir(os.path.join(numpy_files_folder,"RAD")) if j in x])
+
+    qpe_list = [x[-16:-4] for x in os.listdir(os.path.join(numpy_files_folder,"QPE"))]
+    # qpf_list = [x[-16:-4] for x in os.listdir(os.path.join(numpy_files_folder,"QPF"))]
+    rad_list = [x[-16:-4] for x in os.listdir(os.path.join(numpy_files_folder,"RAD"))]
+
     qpe_list_miss = []
-    qpf_list_miss = []
+    # qpf_list_miss = []
     rad_list_miss = []
+
     for i in np.arange(len(ty_list)):
         for j in np.arange(1000):
             time = ty_list.loc[i,"Time of issuing"] + pd.Timedelta(minutes=10*j)
@@ -114,29 +134,58 @@ def check_data():
                 break
             time = time.strftime("%Y%m%d%H%M")
             if time not in qpe_list:
-                qpe_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"_"+time+".npy")
-            if time not in qpf_list:
-                qpf_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"_"+time+".npy")
+                qpe_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"."+time+".npz")
+            # if time not in qpf_list:
+            #     qpf_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"."+time+".npz")
             if time not in rad_list:
-                rad_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"_"+time+".npy")
-    missfiles = np.concatenate([np.array(qpe_list_miss),np.array(rad_list_miss),np.array(qpf_list_miss)])
+                rad_list_miss.append(time[:4]+"."+ty_list.loc[i,"En name"]+"."+time+".npz")
+    missfiles = np.concatenate([np.array(qpe_list_miss),np.array(rad_list_miss)])
     missfiles_index = []
     for i in range(len(qpe_list_miss)):
         missfiles_index.append("QPE")
     for i in range(len(rad_list_miss)):
         missfiles_index.append("RAD")
-    for i in range(len(qpf_list_miss)):
-        missfiles_index.append("QPF")
+    # for i in range(len(qpf_list_miss)):
+    #     missfiles_index.append("QPF")
 
     missfiles = pd.DataFrame(missfiles,index=missfiles_index,columns=["File_name"])
-    missfiles.to_excel("../Missing_files.xlsx")
+    missfiles.to_excel(os.path.join(args.radar_folder,"Missing_files.xlsx"))
+    for i in range(len(missfiles)):
+        missdatatime = dt.datetime.strptime(missfiles.iloc[i,0][-16:-4],"%Y%m%d%H%M")
+        forwardtime = dt.datetime.strftime((missdatatime - dt.timedelta(minutes=10)),"%Y%m%d%H%M")
+        backwardtime = dt.datetime.strftime((missdatatime + dt.timedelta(minutes=10)),"%Y%m%d%H%M")
 
-    return " Check the data completely!"
+        forwardfile = missfiles.iloc[i,0][:-16] + forwardtime + missfiles.iloc[i,0][-4:]
+        backwardfile  = missfiles.iloc[i,0][:-16] + backwardtime + missfiles.iloc[i,0][-4:]
+
+        forwarddata = np.load(os.path.join(args.numpy_files_folder,missfiles.index[i],forwardfile))['data']
+        backwarddata = np.load(os.path.join(args.numpy_files_folder,missfiles.index[i],backwardfile))['data']
+        data = (forwarddata+backwarddata)/2
+        np.savez_compressed(os.path.join(args.numpy_files_folder,missfiles.index[i],missfiles.iloc[i,0]), data=data)
+    return count_qpe, count_qpf, count_rad
+
 
 if __name__ == "__main__":
-    print("*" * 20)
-    print("*{:^18s}*".format('Data extracter'))
-    print("*" * 20)
-    print("-" * 20)
-    print(extract_original_data())
-    uncompress_and_output_numpy_files()
+    info = "*{:^38s}*".format('Data extracter')
+    print("*" * len(info))
+    print(info)
+    print("*" * len(info))
+    print("-" * len(info))
+
+    if os.path.exists(args.compressed_files_folder):
+        print('Already extract oringinal data')
+        print("-" * len(info))
+    else:
+        print(extract_original_data())
+        print("-" * len(info))
+
+    if os.path.exists(args.numpy_files_folder):
+        print('Already output numpy files')
+        print("-" * len(info))
+    else:
+        print(uncompress_and_output_numpy_files())
+        print("-" * len(info))
+
+    count_qpe, _, count_rad = check_data_and_create_miss_data()
+    print(count_qpe)
+    print(count_rad)
