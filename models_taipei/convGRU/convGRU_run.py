@@ -22,7 +22,7 @@ from tools.datasetGRU import ToTensor, Normalize, TyDataset
 from tools.loss_function import BMAE, BMSE
 from convGRU import model
 
-def train(net, trainloader, testloader, results_file, max_epochs=50, loss_function=BMSE,
+def train(net, trainloader, testloader, result_file, max_epochs=50, loss_function=BMSE,
         optimizer=optim.Adam, device=args.device):
     net.train()
 
@@ -32,9 +32,9 @@ def train(net, trainloader, testloader, results_file, max_epochs=50, loss_functi
 
     for epoch in range(max_epochs):
         # Training
-        # open a new file to save results.
-        f_train = open(results_file,"w")
-        test_file = results_file[:-4]+"_test.txt"
+        # open a new file to save result.
+        f_train = open(result_file,"w")
+        test_file = result_file[:-4]+"_test.txt"
         f_test = open(test_file,"w")
 
         for i, data in enumerate(trainloader,0):
@@ -191,7 +191,7 @@ def run(result_name, channel_factor, input_frames, output_frames,
     print("="*len(info))
     print(info)
     print("="*len(info))
-    train(net=Net, trainloader=trainloader, testloader=testloader, results_file=results_file,
+    train(net=Net, trainloader=trainloader, testloader=testloader, result_file=result_file,
             max_epochs=max_epochs, loss_function=loss_function, device=device)
 
 def main():
@@ -202,7 +202,7 @@ def main():
         print("Please set typhoon list file")
         return
     elif args.result_dir == None:
-        print("Please set the directory of the results")
+        print("Please set the directory of the result")
         return
     else:
         # set the parameters of the experiment
