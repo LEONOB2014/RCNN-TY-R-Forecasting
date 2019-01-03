@@ -285,11 +285,11 @@ class DeconvGRU(nn.Module):
 
 class model(nn.Module):
     def __init__(self, n_encoders, n_decoders,
-                    encoder_input, encoder_downsample_layer, encoder_crnn_layer, encoder_kernel_downsample, encoder_kernel_crnn,
-                    encoder_stride_downsample, encoder_stride_crnn, encoder_padding_downsample, encoder_padding_crnn, encoder_n_layers,
-                    decoder_input, decoder_upsample_layer, decoder_crnn_layer, decoder_kernel_upsample, decoder_kernel_crnn,
-                    decoder_stride_upsample, decoder_stride_crnn, decoder_padding_upsample, decoder_padding_crnn, decoder_n_layers,
-                    decoder_output=1, decoder_output_kernel=1, decoder_output_stride=1, decoder_output_padding=0, decoder_output_layers=1,
+                    encoder_input, encoder_downsample_layer, encoder_crnn_layer, encoder_downsample_k, encoder_crnn_k,
+                    encoder_downsample_s, encoder_crnn_s, encoder_downsample_p, encoder_crnn_p, encoder_n_layers,
+                    decoder_input, decoder_upsample_layer, decoder_crnn_layer, decoder_upsample_k, decoder_crnn_k,
+                    decoder_upsample_s, decoder_crnn_s, decoder_upsample_p, decoder_crnn_p, decoder_n_layers,
+                    decoder_output=1, decoder_output_k=1, decoder_output_s=1, decoder_output_p=0, decoder_output_layers=1,
                     batch_norm=False):
         super().__init__()
         self.n_encoders = n_encoders
@@ -298,18 +298,18 @@ class model(nn.Module):
         models = []
         for i in range(self.n_encoders):
             model = ConvGRU(channel_input=encoder_input, channel_downsample=encoder_downsample, channel_crnn=encoder_crnn,
-                            kernel_downsample=encoder_kernel_downsample, kernel_crnn=encoder_kernel_crnn,
-                            stride_downsample=encoder_stride_downsample, stride_crnn=encoder_stride_crnn,
-                            padding_downsample=encoder_padding_downsample, padding_crnn=encoder_padding_crnn, n_layers=encoder_n_layers)
+                            kernel_downsample=encoder_downsample_k, kernel_crnn=encoder_crnn_k,
+                            stride_downsample=encoder_downsample_s, stride_crnn=encoder_crnn_s,
+                            padding_downsample=encoder_downsample_p, padding_crnn=encoder_crnn_p, n_layers=encoder_n_layers)
             name = 'Encoder_' + str(i+1).zfill(2)
             setattr(self, name, model)
             models.append(getattr(self, name))
 
         for i in range(self.n_decoders):
             model = DeconvGRU(channel_input=decoder_input, channel_upsample=decoder_upsample, channel_crnn=decoder_crnn,
-                        kernel_upsample=decoder_kernel_upsample, kernel_crnn=decoder_kernel_crnn,
-                        stride_upsample=decoder_stride_upsample, stride_crnn=decoder_stride_crnn,
-                        padding_upsample=decoder_padding_upsample, padding_crnn=decoder_padding_crnn,
+                        kernel_upsample=decoder_upsample_k, kernel_crnn=decoder_crnn_k,
+                        stride_upsample=decoder_upsample_s, stride_crnn=decoder_crnn_s,
+                        padding_upsample=decoder_upsample_p, padding_crnn=decoder_crnn_p,
                         n_layers=decoder_n_layers, channel_output=decoder_output, output_kernel=decoder_output_kernel,
                         output_stride=decoder_output_stride, output_padding=decoder_output_padding, n_output_layers=decoder_output_layers)
             name = 'Decoder_' + str(i+1).zfill(2)
