@@ -1,6 +1,8 @@
-# input size = 180, forecast size = 60
+# I size = 180, F size = 60
 python convGRU_run.py \
-    --root-dir /storage_sdd/kun/OneDrive/01_IIS/04_TY_research/01_Radar_data/02_wrangled_files_Taipei_I.180_F.60 \
-    --ty-list-file /storage_sdd/kun/OneDrive/01_IIS/04_TY_research/ty_list.xlsx \
-    --result-dir /storage_sdd/kun/OneDrive/01_IIS/04_TY_research/05_results \
+    --root-dir /home/utmostof9/OneDrive/01_IIS/04_TY_research/01_Radar_data/02_numpy_files \
+    --ty-list-file /home/utmostof9/OneDrive/01_IIS/04_TY_research/ty_list.xlsx \
+    --result-dir /home/utmostof9/OneDrive/01_IIS/04_TY_research/05_results \
+    --I-lat-l 24.6625 --I-lat-h 25.4 --I-lon-l 121.15 --I-lon-h 121.8875 \
+    --F-lat-l 24.6625 --F-lat-h 25.4 --F-lon-l 121.15 --F-lon-h 121.8875 \
     --weight-decay 0.1  --gpu 1
