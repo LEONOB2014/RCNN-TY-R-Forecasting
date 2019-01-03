@@ -212,7 +212,7 @@ def main():
         channel_factor = 2
         input_frames = 10
 
-        result_dir = os.path.join(args.result_dir,"I{:d}_F{:d}".format(args.I_shape,args.F_shape),"convGRU_c.{:d}".format(channel_factor))
+        result_dir = os.path.join(args.result_dir,"I{:d}_F{:d}".format(args.I_shape[0],args.F_shape[0]),"convGRU_c.{:d}".format(channel_factor))
         createfolder(result_dir)
         result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
         print(result_name)
