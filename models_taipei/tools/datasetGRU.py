@@ -29,7 +29,6 @@ class TyDataset(Dataset):
         super().__init__()
         self.ty_list = pd.read_excel(ty_list_file,index_col="En name").drop("Ch name",axis=1)
         self.root_dir = root_dir
-            max_epochs=max_epochs, loss_function=loss_function, device=device)
         self.input_frames = input_frames
         self.output_frames = output_frames
         self.transform = transform
