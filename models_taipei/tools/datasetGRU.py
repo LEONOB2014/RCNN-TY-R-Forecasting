@@ -29,6 +29,7 @@ class TyDataset(Dataset):
         super().__init__()
         self.ty_list = pd.read_excel(ty_list_file,index_col="En name").drop("Ch name",axis=1)
         self.root_dir = root_dir
+            max_epochs=max_epochs, loss_function=loss_function, device=device)
         self.input_frames = input_frames
         self.output_frames = output_frames
         self.transform = transform
@@ -85,7 +86,7 @@ class TyDataset(Dataset):
                                                           ,format="%Y%m%d%H%M")
                     # print("rad_data: {:s}".format(year+'.'+i+"_"+rad_file_time+".npy"))
                     data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"."+rad_file_time+".npz"))['data'][args.I_y_low:args.I_y_high+1,args.I_x_left:args.I_x_right+1]
-                    print("rad:",data.shape)
+
                     rad_data.append(np.expand_dims(data, axis=0))
                 rad_data = np.array(rad_data)
 
@@ -97,7 +98,7 @@ class TyDataset(Dataset):
                                                           ,format="%Y%m%d%H%M")
                     # print("qpe_data: {:s}".format(year+'.'+i+"_"+qpe_file_time+".npy"))
                     data = np.load(os.path.join(self.root_dir,'QPE',year+'.'+i+"."+qpe_file_time+".npz"))['data'][args.F_y_low:args.F_y_high+1,args.F_x_left:args.F_x_right+1]
-                    print("qpe:",data.shape)
+
                     qpe_data.append(data)
                 qpe_data = np.array(qpe_data)
                 # return the idx of sample
