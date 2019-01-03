@@ -297,7 +297,7 @@ class model(nn.Module):
 
         models = []
         for i in range(self.n_encoders):
-            model = ConvGRU(channel_input=encoder_input, channel_downsample=encoder_downsample, channel_crnn=encoder_crnn,
+            model = ConvGRU(channel_input=encoder_input, channel_downsample=encoder_downsample_layer, channel_crnn=encoder_crnn_layer,
                             kernel_downsample=encoder_downsample_k, kernel_crnn=encoder_crnn_k,
                             stride_downsample=encoder_downsample_s, stride_crnn=encoder_crnn_s,
                             padding_downsample=encoder_downsample_p, padding_crnn=encoder_crnn_p, n_layers=encoder_n_layers)
@@ -306,7 +306,7 @@ class model(nn.Module):
             models.append(getattr(self, name))
 
         for i in range(self.n_decoders):
-            model = DeconvGRU(channel_input=decoder_input, channel_upsample=decoder_upsample, channel_crnn=decoder_crnn,
+            model = DeconvGRU(channel_input=decoder_input, channel_upsample=decoder_upsample_layer, channel_crnn=decoder_crnn_layer,
                         kernel_upsample=decoder_upsample_k, kernel_crnn=decoder_crnn_k,
                         stride_upsample=decoder_upsample_s, stride_crnn=decoder_crnn_s,
                         padding_upsample=decoder_upsample_p, padding_crnn=decoder_crnn_p,
