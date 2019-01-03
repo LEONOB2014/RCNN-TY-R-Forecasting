@@ -310,8 +310,8 @@ class model(nn.Module):
                         kernel_upsample=decoder_upsample_k, kernel_crnn=decoder_crnn_k,
                         stride_upsample=decoder_upsample_s, stride_crnn=decoder_crnn_s,
                         padding_upsample=decoder_upsample_p, padding_crnn=decoder_crnn_p,
-                        n_layers=decoder_n_layers, channel_output=decoder_output, output_kernel=decoder_output_kernel,
-                        output_stride=decoder_output_stride, output_padding=decoder_output_padding, n_output_layers=decoder_output_layers)
+                        n_layers=decoder_n_layers, channel_output=decoder_output, output_kernel=decoder_output_k,
+                        output_stride=decoder_output_s, output_padding=decoder_output_p, n_output_layers=decoder_output_layers)
             name = 'Decoder_' + str(i+1).zfill(2)
             setattr(self, name, model)
             models.append(getattr(self, name))
