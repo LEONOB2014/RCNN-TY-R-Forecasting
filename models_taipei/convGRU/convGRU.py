@@ -285,9 +285,9 @@ class DeconvGRU(nn.Module):
 
 class model(nn.Module):
     def __init__(self, n_encoders, n_decoders,
-                    encoder_input, encoder_downsample, encoder_crnn, encoder_kernel_downsample, encoder_kernel_crnn,
+                    encoder_input, encoder_downsample_layer, encoder_crnn_layer, encoder_kernel_downsample, encoder_kernel_crnn,
                     encoder_stride_downsample, encoder_stride_crnn, encoder_padding_downsample, encoder_padding_crnn, encoder_n_layers,
-                    decoder_input, decoder_upsample, decoder_crnn, decoder_kernel_upsample, decoder_kernel_crnn,
+                    decoder_input, decoder_upsample_layer, decoder_crnn_layer, decoder_kernel_upsample, decoder_kernel_crnn,
                     decoder_stride_upsample, decoder_stride_crnn, decoder_padding_upsample, decoder_padding_crnn, decoder_n_layers,
                     decoder_output=1, decoder_output_kernel=1, decoder_output_stride=1, decoder_output_padding=0, decoder_output_layers=1,
                     batch_norm=False):
