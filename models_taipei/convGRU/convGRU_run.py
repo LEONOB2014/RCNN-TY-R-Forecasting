@@ -140,10 +140,10 @@ def run(result_name, channel_factor, input_frames, output_frames,
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
-    if int(args.I_shape/3) == args.F_shape:
+    if int(args.I_shape[0]/3) == args.F_shape[0]:
         encoder_kernel_downsample = [5,4,4]
         encoder_stride_downsample = [3,2,2]
-    elif args.I_shape == args.F_shape:
+    elif args.I_shape[0] == args.F_shape[0]:
         encoder_kernel_downsample = [4,4,4]
         encoder_stride_downsample = [2,2,2]
 
