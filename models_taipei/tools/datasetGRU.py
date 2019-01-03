@@ -84,7 +84,7 @@ class TyDataset(Dataset):
                     rad_file_time = dt.datetime.strftime(self.idx_list.loc[i,'frame_start']+dt.timedelta(minutes=10*(idx_tmp+j))
                                                           ,format="%Y%m%d%H%M")
                     # print("rad_data: {:s}".format(year+'.'+i+"_"+rad_file_time+".npy"))
-                    data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"_"+rad_file_time+".npz"))['data'][args.I_y_low:args.I_y_high,args.I_x_left:args.I_x_right]
+                    data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"."+rad_file_time+".npz"))['data'][args.I_y_low:args.I_y_high,args.I_x_left:args.I_x_right]
                     rad_data.append(np.expand_dims(data), axis=0)
                 rad_data = np.array(rad_data)
 
@@ -95,7 +95,7 @@ class TyDataset(Dataset):
                     qpe_file_time = dt.datetime.strftime(self.idx_list.loc[i,'frame_start']+dt.timedelta(minutes=10*(idx_tmp+j))
                                                           ,format="%Y%m%d%H%M")
                     # print("qpe_data: {:s}".format(year+'.'+i+"_"+qpe_file_time+".npy"))
-                    data = np.load(os.path.join(self.root_dir,'QPE',year+'.'+i+"_"+qpe_file_time+".npz"))['data'][args.F_y_low:args.F_y_high,args.F_x_left:args.F_x_right]
+                    data = np.load(os.path.join(self.root_dir,'QPE',year+'.'+i+"."+qpe_file_time+".npz"))['data'][args.F_y_low:args.F_y_high,args.F_x_left:args.F_x_right]
                     qpe_data.append(data)
                 qpe_data = np.array(qpe_data)
                 # return the idx of sample
