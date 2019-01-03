@@ -7,7 +7,7 @@ import datetime as dt
 from torch.utils.data import Dataset
 import torch
 
-from .args_tools import args
+from args_tools import args
 
 
 class TyDataset(Dataset):
@@ -84,8 +84,8 @@ class TyDataset(Dataset):
                     rad_file_time = dt.datetime.strftime(self.idx_list.loc[i,'frame_start']+dt.timedelta(minutes=10*(idx_tmp+j))
                                                           ,format="%Y%m%d%H%M")
                     # print("rad_data: {:s}".format(year+'.'+i+"_"+rad_file_time+".npy"))
-                    data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"_"+rad_file_time+".npz")['data'][args.I_y_low:args.I_y_high,args.I_x_left:args.I_x_right]
-                    rad_data.append(np.expand_dims(data), axis=0))
+                    data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"_"+rad_file_time+".npz"))['data'][args.I_y_low:args.I_y_high,args.I_x_left:args.I_x_right]
+                    rad_data.append(np.expand_dims(data), axis=0)
                 rad_data = np.array(rad_data)
 
                 # QPE data(a tensor with shape (output_frames X H X W))
@@ -133,10 +133,10 @@ class Normalize(object):
 
 def main():
     # test dataloader
-    train_dataset = TyDataset(ty_list_file="../../ty_list.xlsx",
-                          root_dir=os.path.join("../../01_Radar_data",args.files_folder),
+    train_dataset = TyDataset(ty_list_file=args.ty_list_file,
+                          root_dir=args.root_dir,
                           input_frames=5,
-                          output_frames=20,
+                          output_frames=180,
                           train=True,
                           transform = ToTensor())
     print(train_dataset[2]["QPE"].shape)
