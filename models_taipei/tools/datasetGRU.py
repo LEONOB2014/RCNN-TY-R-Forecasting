@@ -85,7 +85,7 @@ class TyDataset(Dataset):
                                                           ,format="%Y%m%d%H%M")
                     # print("rad_data: {:s}".format(year+'.'+i+"_"+rad_file_time+".npy"))
                     data = np.load(os.path.join(self.root_dir,'RAD',year+'.'+i+"."+rad_file_time+".npz"))['data'][args.I_y_low:args.I_y_high,args.I_x_left:args.I_x_right]
-                    rad_data.append(np.expand_dims(data), axis=0)
+                    rad_data.append(np.expand_dims(data, axis=0))
                 rad_data = np.array(rad_data)
 
                 # QPE data(a tensor with shape (output_frames X H X W))
