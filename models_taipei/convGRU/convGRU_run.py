@@ -139,53 +139,55 @@ def run(result_name, channel_factor, input_frames, output_frames,
     # construct convGRU net
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
-    encoder_downsample = [2*c,32*c,96*c]
+    encoder_downsample_layer = [2*c,32*c,96*c]
+    encoder_crnn_layer = [32*c,96*c,96*c]
+
     if int(args.I_shape[0]/3) == args.F_shape[0]:
-        encoder_kernel_downsample = [5,4,4]
-        encoder_stride_downsample = [3,2,2]
+        encoder_downsample_k = [5,4,4]
+        encoder_downsample_s = [3,2,2]
+        encoder_downsample_p = [1,1,1]
     elif args.I_shape[0] == args.F_shape[0]:
-        encoder_kernel_downsample = [4,4,3]
-        encoder_stride_downsample = [2,2,2]
+        encoder_downsample_k = [3,4,4]
+        encoder_downsample_s = [1,2,2]
+        encoder_downsample_p = [1,1,1]
 
-    encoder_padding_downsample = [1,1,1]
 
-    encoder_crnn = [32*c,96*c,96*c]
-    encoder_kernel_crnn = [4,4,4]
-    encoder_stride_crnn = [1,1,1]
-    encoder_padding_crnn = [1,1,1]
+    encoder_crnn_k = [3,3,3]
+    encoder_crnn_s = [1,1,1]
+    encoder_crnn_p = [1,1,1]
     encoder_n_layers = 6
 
     decoder_input=0
-    decoder_upsample = [96*c,96*c,4*c]
-    decoder_kernel_upsample = [3,4,4]
-    decoder_stride_upsample = [2,2,1]
-    decoder_padding_upsample = [1,1,1]
+    decoder_upsample_layer = [96*c,96*c,4*c]
+    decoder_crnn_layer = [96*c,96*c,32*c]
 
-    decoder_crnn = [96*c,96*c,32*c]
-    decoder_kernel_crnn = [4,4,4]
+    decoder_upsample_k = [4,4,3]
+    decoder_upsample_s = [2,2,1]
+    decoder_upsample_p = [1,1,1]
+
+    decoder_kernel_crnn = [3,3,3]
     decoder_stride_crnn = [1,1,1]
     decoder_padding_crnn = [1,1,1]
     decoder_n_layers = 6
 
     decoder_output = 1
-
-    decoder_output_kernel = 4
-    decoder_output_stride = 1
-    decoder_output_padding = 1
+    decoder_output_k = 3
+    decoder_output_s = 1
+    decoder_output_p = 1
     decoder_output_layers = 1
 
     Net = model(n_encoders=input_frames, n_decoders=output_frames,
-                encoder_input=encoder_input, encoder_downsample=encoder_downsample, encoder_crnn=encoder_crnn,
-                encoder_kernel_downsample=encoder_kernel_downsample, encoder_kernel_crnn=encoder_kernel_crnn,
-                encoder_stride_downsample=encoder_stride_downsample, encoder_stride_crnn=encoder_stride_crnn,
-                encoder_padding_downsample=encoder_padding_downsample, encoder_padding_crnn=encoder_padding_crnn,
+                encoder_input=encoder_input, encoder_downsample_layer=encoder_downsample_layer, encoder_crnn_layer=encoder_crnn_layer,
+                encoder_downsample_k=encoder_downsample_k, encoder_crnn_k=encoder_crnn_k,
+                encoder_downsample_s=encoder_downsample_s, encoder_crnn_s=encoder_crnn_s,
+                encoder_downsample_p=encoder_downsample_p, encoder_crnn_p=encoder_crnn_p,
                 encoder_n_layers=encoder_n_layers,
-                decoder_input=decoder_input, decoder_upsample=decoder_upsample, decoder_crnn=decoder_crnn,
-                decoder_kernel_upsample=decoder_kernel_upsample, decoder_kernel_crnn=decoder_kernel_crnn,
-                decoder_stride_upsample=decoder_stride_upsample, decoder_stride_crnn=decoder_stride_crnn,
-                decoder_padding_upsample=decoder_padding_upsample, decoder_padding_crnn=decoder_padding_crnn,
-                decoder_n_layers=decoder_n_layers, decoder_output=1, decoder_output_kernel= decoder_output_kernel,
-                decoder_output_stride=decoder_output_stride, decoder_output_padding=decoder_output_padding,
+                decoder_input=decoder_input, decoder_upsample_layer=decoder_upsample_layer, decoder_crnn_layer=decoder_crnn_layer,
+                decoder_upsample_k=decoder_upsample_k, decoder_kernel_crnn=decoder_kernel_crnn,
+                decoder_upsample_s=decoder_upsample_s, decoder_stride_crnn=decoder_stride_crnn,
+                decoder_upsample_p=decoder_upsample_p, decoder_padding_crnn=decoder_padding_crnn,
+                decoder_n_layers=decoder_n_layers, decoder_output=1, decoder_output_k= decoder_output_k,
+                decoder_output_s=decoder_output_s, decoder_output_p=decoder_output_p,
                 decoder_output_layers=decoder_output_layers, batch_norm=False).to(device, dtype=torch.float)
     info = "| Channel factor c: {:02d}, Forecast frames: {:02d}, Input frames: {:02d} |".format(channel_factor, output_frames,input_frames)
     print("="*len(info))
