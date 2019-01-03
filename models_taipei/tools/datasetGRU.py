@@ -138,7 +138,7 @@ def main():
     train_dataset = TyDataset(ty_list_file=args.ty_list_file,
                           root_dir=args.root_dir,
                           input_frames=5,
-                          output_frames=180,
+                          output_frames=18,
                           train=True,
                           transform = ToTensor())
     print(train_dataset[2]["QPE"].shape)
