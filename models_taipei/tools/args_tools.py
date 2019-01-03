@@ -80,10 +80,10 @@ if not args.disable_cuda and torch.cuda.is_available():
 else:
     args.device = torch.device('cpu')
 
-args.forecast_shape = (math.ceil((args.F_lat_h-args.F_lat_l)/args.res_degree)+1,
+args.F_shape = (math.ceil((args.F_lat_h-args.F_lat_l)/args.res_degree)+1,
                        math.ceil((args.F_lon_h-args.F_lon_l)/args.res_degree)+1)
-args.input_shape = (math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree)+1,
-                    math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree)+1)
+args.I_shape = (math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree)+1,
+                    math.ceil((args.I_lon_h-args.I_lon_l)/args.res_degree))
 
 if __name__ == "__main__":
     print(args.I_x_left)

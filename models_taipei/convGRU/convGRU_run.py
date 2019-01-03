@@ -94,7 +94,7 @@ def test(net, testloader, loss_function=nn.MSELoss(), device=args.device):
         loss = loss/n
     return loss
 
-def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 60):
+def get_dataloader(input_frames, output_frames):
     # Normalize data
     mean = [12.834] * input_frames
     std = [14.14] * input_frames
@@ -104,16 +104,12 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
     traindataset = TyDataset(ty_list_file=args.ty_list_file,
                         input_frames=input_frames,
                         output_frames=output_frames,
-                        input_size=input_size,
-                        output_size=output_size,
                         train=True,
                         root_dir=args.root_dir,
                         transform = transfrom)
     testdataset = TyDataset(ty_list_file=args.ty_list_file,
                         input_frames=input_frames,
                         output_frames=output_frames,
-                        input_size=input_size,
-                        output_size=output_size,
                         train=False,
                         root_dir=args.root_dir,
                         transform = transfrom)
@@ -126,7 +122,7 @@ def get_dataloader(input_frames, output_frames, input_size = 180, output_size = 
     return trainloader, testloader
 
 
-def run(result_name, channel_factor, input_frames, output_frames, input_size, output_size,
+def run(result_name, channel_factor, input_frames, output_frames,
         loss_function=BMSE, max_epochs=50, device=args.device):
 
     # if loss_function == "BMSE":
@@ -135,8 +131,7 @@ def run(result_name, channel_factor, input_frames, output_frames, input_size, ou
     #     loss_function = BMAE
 
     # get dataloader
-    trainloader, testloader = get_dataloader(input_frames=input_frames, output_frames=output_frames,
-                                             input_size=input_size, output_size=output_size)
+    trainloader, testloader = get_dataloader(input_frames=input_frames, output_frames=output_frames)
 
     # set the factor of cnn channels
     c = channel_factor
@@ -145,10 +140,10 @@ def run(result_name, channel_factor, input_frames, output_frames, input_size, ou
     # initialize the parameters of the encoders and decoders
     encoder_input = 1
     encoder_downsample = [2*c,32*c,96*c]
-    if int(input_size/3) == output_size:
+    if int(args.I_shape/3) == args.F_shape:
         encoder_kernel_downsample = [5,4,4]
         encoder_stride_downsample = [3,2,2]
-    elif input_size == output_size:
+    elif args.I_shape == args.F_shape:
         encoder_kernel_downsample = [4,4,4]
         encoder_stride_downsample = [2,2,2]
 
@@ -218,12 +213,9 @@ def main():
         result_dir = os.path.join(args.result_dir,args.root_dir[-9:],"convGRU_c.{:d}".format(channel_factor))
         createfolder(result_dir)
         result_name = os.path.join(result_dir,"BMSE_f.{:02d}_x.{:02d}_w{:f}.txt".format(output_frames,input_frames,args.weight_decay))
-        print(os.path.abspath(result_name))
-        print(args.input_shape[0])
-        print(args.forecast_shape[0])
 
-        run(result_name=result_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
-            output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
+        run(result_name=result_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames,
+            loss_function=BMSE, max_epochs=100, device=args.device)
 
 
 if __name__ == "__main__":
