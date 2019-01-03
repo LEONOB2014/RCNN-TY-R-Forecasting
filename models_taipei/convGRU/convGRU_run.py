@@ -22,7 +22,7 @@ from tools.datasetGRU import ToTensor, Normalize, TyDataset
 from tools.loss_function import BMAE, BMSE
 from convGRU import model
 
-def train(net, trainloader, testloader, result_file, max_epochs=50, loss_function=BMSE,
+def train(net, trainloader, testloader, result_name, max_epochs=50, loss_function=BMSE,
         optimizer=optim.Adam, device=args.device):
     net.train()
 
@@ -33,8 +33,8 @@ def train(net, trainloader, testloader, result_file, max_epochs=50, loss_functio
     for epoch in range(max_epochs):
         # Training
         # open a new file to save result.
-        f_train = open(result_file,"w")
-        test_file = result_file[:-4]+"_test.txt"
+        f_train = open(result_name,"w")
+        test_file = result_name[:-4]+"_test.txt"
         f_test = open(test_file,"w")
 
         for i, data in enumerate(trainloader,0):
@@ -69,7 +69,7 @@ def train(net, trainloader, testloader, result_file, max_epochs=50, loss_functio
         print("ConvGRUv2|  Epoch [{}/{}], Test Loss: {:8.3f}".format(epoch+1, max_epochs, test_loss))
         f_test.writelines("Epoch [{}/{}], Test Loss: {:8.3f}\n".format(epoch+1, max_epochs, test_loss))
         if (epoch+1) % 10 == 0:
-            torch.save(net.state_dict(), result_file[:-4]+'_{:d}.ckpt'.format(epoch+1))
+            torch.save(net.state_dict(), result_name[:-4]+'_{:d}.ckpt'.format(epoch+1))
         if (epoch+1) == max_epochs:
             total_params = sum(p.numel() for p in net.parameters())
             print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
@@ -191,7 +191,7 @@ def run(result_name, channel_factor, input_frames, output_frames,
     print("="*len(info))
     print(info)
     print("="*len(info))
-    train(net=Net, trainloader=trainloader, testloader=testloader, result_file=result_file,
+    train(net=Net, trainloader=trainloader, testloader=testloader, result_name=result_name,
             max_epochs=max_epochs, loss_function=loss_function, device=device)
 
 def main():
