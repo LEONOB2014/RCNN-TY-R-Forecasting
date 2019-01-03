@@ -165,9 +165,9 @@ def run(result_name, channel_factor, input_frames, output_frames,
     decoder_upsample_s = [2,2,1]
     decoder_upsample_p = [1,1,1]
 
-    decoder_kernel_crnn = [3,3,3]
-    decoder_stride_crnn = [1,1,1]
-    decoder_padding_crnn = [1,1,1]
+    decoder_crnn_k = [3,3,3]
+    decoder_crnn_s = [1,1,1]
+    decoder_crnn_p = [1,1,1]
     decoder_n_layers = 6
 
     decoder_output = 1
@@ -183,10 +183,10 @@ def run(result_name, channel_factor, input_frames, output_frames,
                 encoder_downsample_p=encoder_downsample_p, encoder_crnn_p=encoder_crnn_p,
                 encoder_n_layers=encoder_n_layers,
                 decoder_input=decoder_input, decoder_upsample_layer=decoder_upsample_layer, decoder_crnn_layer=decoder_crnn_layer,
-                decoder_upsample_k=decoder_upsample_k, decoder_kernel_crnn=decoder_kernel_crnn,
-                decoder_upsample_s=decoder_upsample_s, decoder_stride_crnn=decoder_stride_crnn,
-                decoder_upsample_p=decoder_upsample_p, decoder_padding_crnn=decoder_padding_crnn,
-                decoder_n_layers=decoder_n_layers, decoder_output=1, decoder_output_k= decoder_output_k,
+                decoder_upsample_k=decoder_upsample_k, decoder_crnn_k=decoder_crnn_k,
+                decoder_upsample_s=decoder_upsample_s, decoder_crnn_s=decoder_crnn_s,
+                decoder_upsample_p=decoder_upsample_p, decoder_crnn_p=decoder_crnn_p,
+                decoder_n_layers=decoder_n_layers, decoder_output=1, decoder_output_k=decoder_output_k,
                 decoder_output_s=decoder_output_s, decoder_output_p=decoder_output_p,
                 decoder_output_layers=decoder_output_layers, batch_norm=False).to(device, dtype=torch.float)
     info = "| Channel factor c: {:02d}, Forecast frames: {:02d}, Input frames: {:02d} |".format(channel_factor, output_frames,input_frames)
