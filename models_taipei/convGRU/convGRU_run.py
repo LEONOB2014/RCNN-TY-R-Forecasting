@@ -144,7 +144,7 @@ def run(result_name, channel_factor, input_frames, output_frames,
         encoder_kernel_downsample = [5,4,4]
         encoder_stride_downsample = [3,2,2]
     elif args.I_shape[0] == args.F_shape[0]:
-        encoder_kernel_downsample = [4,4,4]
+        encoder_kernel_downsample = [4,4,3]
         encoder_stride_downsample = [2,2,2]
 
     encoder_padding_downsample = [1,1,1]
@@ -157,7 +157,7 @@ def run(result_name, channel_factor, input_frames, output_frames,
 
     decoder_input=0
     decoder_upsample = [96*c,96*c,4*c]
-    decoder_kernel_upsample = [4,4,4]
+    decoder_kernel_upsample = [3,4,4]
     decoder_stride_upsample = [2,2,1]
     decoder_padding_upsample = [1,1,1]
 
