@@ -90,3 +90,7 @@ if __name__ == "__main__":
     print(args.I_x_right)
     print(args.I_y_low)
     print(args.I_y_high)
+    print(args.F_x_left)
+    print(args.F_x_right)
+    print(args.F_y_low)
+    print(args.F_y_high)
