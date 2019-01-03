@@ -7,7 +7,7 @@ import datetime as dt
 from torch.utils.data import Dataset
 import torch
 
-from .args_tools import args
+from tools.args_tools import args
 
 
 class TyDataset(Dataset):
