@@ -223,7 +223,7 @@ def main():
         print(args.forecast_shape[0])
 
         # run(result_name=result_name, channel_factor=channel_factor, input_frames=input_frames, output_frames=output_frames, input_size= args.input_shape[0],
-            # output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
+        #     output_size=args.forecast_shape[0], loss_function=BMSE, max_epochs=100, device=args.device)
 
 
 if __name__ == "__main__":
