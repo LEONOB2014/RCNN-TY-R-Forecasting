@@ -23,8 +23,15 @@ from tools.loss_function import BMAE, BMSE
 from convGRU import model
 
 def train(net, trainloader, testloader, result_name, max_epochs=50, loss_function=BMSE,
-        optimizer=optim.Adam, device=args.device):
+          optimizer=optim.Adam, device=args.device):
     net.train()
+    train_file = result_name
+    test_file = result_name[:-4]+"_test.txt"
+
+    if os.path.exists(train_file):
+        os.remove(train_file)
+    if os.path.exists(test_file):
+        os.remove(test_file)
 
     # Set optimizer
     optimizer = optimizer(net.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -33,9 +40,10 @@ def train(net, trainloader, testloader, result_name, max_epochs=50, loss_functio
     for epoch in range(max_epochs):
         # Training
         # open a new file to save result.
-        f_train = open(result_name,"w")
-        test_file = result_name[:-4]+"_test.txt"
-        f_test = open(test_file,"w")
+
+        f_train = open(train_file,"a")
+
+        f_test = open(test_file,"a")
 
         for i, data in enumerate(trainloader,0):
             inputs = data["RAD"].to(device, dtype=torch.float)
