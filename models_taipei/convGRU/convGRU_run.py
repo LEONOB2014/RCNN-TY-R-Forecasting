@@ -76,7 +76,10 @@ def train(net, trainloader, testloader, result_name, max_epochs=50, loss_functio
         print("ConvGRUv2|  Epoch [{}/{}], Test Loss: {:8.3f}".format(epoch+1, max_epochs, test_loss))
         f_test.writelines("Epoch [{}/{}], Test Loss: {:8.3f}\n".format(epoch+1, max_epochs, test_loss))
         if (epoch+1) % 10 == 0:
-            torch.save(net.state_dict(), result_name[:-4]+'_{:d}.ckpt'.format(epoch+1))
+            torch.save(net.state_dict(), result_name[:-4]+'.ckpt'.format(epoch+1))
+            with open(result_name[:-4]+'_epoch.txt'.format(epoch+1), 'w') as f:
+                print("epoch: ", epoch+1)
+
         if (epoch+1) == max_epochs:
             total_params = sum(p.numel() for p in net.parameters())
             print("\nConvGRUv2|  Total_params: {:.2e}".format(total_params))
